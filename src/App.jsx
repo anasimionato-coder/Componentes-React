@@ -1,122 +1,76 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Cabecalho from "./components/Cabecalho";
+import CardCurso from "./components/CardCurso";
+import Destaque from "./components/Destaque";
+import Rodape from "./components/Rodape";
+import "./App.css";
+
+const cursos = [
+  { id: 1, nome: "Desenvolvimento de Sistemas", duracao: "1200 horas", modalidade: "Presencial", nivel: "Técnico", vagas: 15 },
+  { id: 2, nome: "Redes de Computadores", duracao: "1000 horas", modalidade: "Presencial", nivel: "Técnico", vagas: 0 },
+  { id: 3, nome: "Manutenção de Computadores", duracao: "800 horas", modalidade: "EAD", nivel: "Qualificação", vagas: 8 },
+  { id: 4, nome: "Programação Web", duracao: "600 horas", modalidade: "Semipresencial", nivel: "Aperfeiçoamento", vagas: 20 },
+  { id: 5, nome: "Banco de Dados", duracao: "400 horas", modalidade: "EAD", nivel: "Aperfeiçoamento", vagas: 0 },
+  { id: 6, nome: "Desenvolvimento Mobile", duracao: "500 horas", modalidade: "EAD", nivel: "Aperfeiçoamento", vagas: 12 },
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selecionadoId, setSelecionadoId] = useState(null);
+
+  function alternarSelecao(id) {
+    setSelecionadoId((prevId) => (prevId === id ? null : id));
+  }
+
+  const cursoSelecionado = cursos.find((curso) => curso.id === selecionadoId);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="container-app">
+      <Cabecalho />
 
-      <div className="ticks"></div>
+      <main className="conteudo-principal">
+        <section className="secao-destaques">
+          <h2>Diferenciais do Nosso Catálogo</h2>
+          <div className="grid-destaques">
+            <Destaque titulo="Aprenda fazendo" texto="Desenvolva projetos práticos durante sua formação." />
+            <Destaque titulo="Certificação reconhecida" texto="Conquiste certificados aceitos no mercado de trabalho." />
+            <Destaque titulo="Instrutores qualificados" texto="Aulas ministradas por especialistas da área de tecnologia." />
+          </div>
+        </section>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <section className="secao-cursos">
+          <h2>Formações Disponíveis</h2>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          {cursoSelecionado && (
+            <div className="faixa-selecao">
+              <p>
+                Turma selecionada: <strong>{cursoSelecionado.nome}</strong>
+              </p>
+              <button type="button" onClick={() => setSelecionadoId(null)}>
+                Limpar
+              </button>
+            </div>
+          )}
+
+          <div className="grid-cursos">
+            {cursos.map((curso) => (
+              <CardCurso
+                key={curso.id}
+                nome={curso.nome}
+                duracao={curso.duracao}
+                modalidade={curso.modalidade}
+                nivel={curso.nivel}
+                vagas={curso.vagas}
+                selecionado={curso.id === selecionadoId}
+                onSelecionar={() => alternarSelecao(curso.id)}
+              />
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <Rodape />
+    </div>
+  );
 }
 
-export default App
+export default App;
